@@ -5,16 +5,44 @@ output:
     keep_md: true
 ---
 
+## Source packages 
+Install them if needed (TODO)
+```{r}
+library(dplyr)
+# library(lubridate)  
+```
+
 
 ## Loading and preprocessing the data
+Assume data is in the same directory as this script
+
+1. If no csv, unzip first
+2. Read csv 
+3. Format date
+
 ```{r}
+if (!any(grepl("activity.csv",list.files()))){
+  unzip("activity.zip")
+}
+
+df <- read.csv("activity.csv")
 
 ```
 
 
 
 ## What is mean total number of steps taken per day?
+Summarize steps per day with the dplyr package. Ignore missing data. 
 
+1. group_by date 
+2. summarize dates using sum()
+3. summarize daily means using mean()
+
+```{r}
+avg_steps_daily <-  group_by(df, date) %>% 
+                    summarize(daily = sum(steps, na.rm=TRUE)) %>%
+                    summarize(mean_daily = mean(daily, na.rm = TRUE))
+```
 
 
 ## What is the average daily activity pattern?
