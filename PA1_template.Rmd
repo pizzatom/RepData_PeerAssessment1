@@ -34,19 +34,23 @@ df <- read.csv("activity.csv")
 ## What is mean total number of steps taken per day?
 Summarize steps per day with the dplyr package. Ignore missing data. 
 
+Average 
 1. group_by date 
 2. summarize dates using sum()
 3. summarize daily means using mean()
 
 ```{r}
-avg_steps_daily <-  group_by(df, date) %>% 
+avg_daily_steps <-  group_by(df, date) %>% 
                     summarize(daily = sum(steps, na.rm=TRUE)) %>%
                     summarize(mean_daily = mean(daily, na.rm = TRUE))
 ```
 
 
 ## What is the average daily activity pattern?
+Create a plot of the average daily activity pattern.
 
+1. group_by date
+2. summarize dates using me
 
 
 ## Imputing missing values
