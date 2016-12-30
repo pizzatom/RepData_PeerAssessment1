@@ -7,9 +7,9 @@ output:
 
 ## Source packages 
 Install them if needed (TODO)
-```{r}
+```{r, echo=FALSE}
 library(dplyr)
-# library(lubridate)  
+library(ggplot2)
 ```
 
 
@@ -34,23 +34,55 @@ df <- read.csv("activity.csv")
 ## What is mean total number of steps taken per day?
 Summarize steps per day with the dplyr package. Ignore missing data. 
 
-Average 
-1. group_by date 
-2. summarize dates using sum()
-3. summarize daily means using mean()
+1. Average daily steps
+  a. group_by date 
+  b. summarize dates using sum()
+  c. summarize daily means using mean()
 
 ```{r}
 avg_daily_steps <-  group_by(df, date) %>% 
                     summarize(daily = sum(steps, na.rm=TRUE)) %>%
                     summarize(mean_daily = mean(daily, na.rm = TRUE))
+print(avg_daily_steps)
+```
+
+2. Median daily steps
+  a. group_by date 
+  b. summarize dates using sum()
+  c. summarize daily means using medain()
+  
+```{r}
+med_daily_steps <-  group_by(df, date) %>% 
+                    summarize(daily = sum(steps, na.rm=TRUE)) %>%
+                    summarize(median_daily = median(daily, na.rm = TRUE))
+print(med_daily_steps)
 ```
 
 
 ## What is the average daily activity pattern?
-Create a plot of the average daily activity pattern.
 
-1. group_by date
-2. summarize dates using me
+1. Create a time series plot of the averaged 5-minute activity patterns using the ggplot2 package.
+  a. group_by interval
+  b. summarize dates using mean(), ignoring missing data for now
+  c. plot (type = "l")
+  
+```{r}
+avg_interval_steps <- group_by(df, interval) %>%
+                      summarize(mean_steps = mean(steps, na.rm=TRUE))
+f <- ggplot(avg_interval_steps, aes(interval, mean_steps))
+f <- f + geom_line()
+f
+```
+
+2. Find the 5 minute interval with the highest average step count. Add it to the plot for fun. 
+
+```{r}
+highest_avg_interval <- avg_interval_steps[which.max(avg_interval_steps$mean_steps), ]
+print(highest_avg_interval)
+
+f <- f + geom_point(data = highest_avg_interval, shape = 11 , size = 4, color = "red")
+f
+```
 
 
 ## Imputing missing values
