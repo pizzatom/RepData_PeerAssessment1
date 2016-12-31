@@ -87,6 +87,38 @@ f
 
 ## Imputing missing values
 
+1. Calculate total number of NAs
+```{r}
+print(sum(is.na(df)))
+```
+
+2. Fill missing values
+Fill the missing values using the average interval data that we computed before. Group the data by interval and check every value. If the interval is.na, then fill it with the median value (with na.rm) for that interval. If the interval is numeric, return the original step count. Note that if we choose to use the mean value, the imputed data steps would have different types: integer for the original, and numeric for the filled data.  
+
+3. Create a new dataset with missing values filled in
+  a. group by interval 
+  b. if the interval is.na, fill it with the median_steps, otherwise leave it as it
+
+```{r}
+df_filled <- group_by(df,interval) %>%
+             mutate(steps = ifelse(is.na(steps), median(steps, na.rm = TRUE), steps))
+```
+
+4. Make a histogram of the total steps each day. 
+  a. group by date
+  b. summarize with sum()
+  c. make a histogram of daily steps
+```{r}
+total_daily_filled <- group_by(df_filled, date) %>% 
+                      summarize(daily_steps = sum(steps))
+
+a <- ggplot(group_by(total_daily_filled,date), aes(daily_steps))
+a + geom_histogram(bins=20)
+```
+
+Calculate mean and meadian daily steps. Does this differ from before? How has imputing data impacted these measurements?
+
+
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
