@@ -69,6 +69,7 @@ print(med_daily_steps)
 ```{r}
 avg_interval_steps <- group_by(df, interval) %>%
                       summarize(mean_steps = mean(steps, na.rm=TRUE))
+
 f <- ggplot(avg_interval_steps, aes(interval, mean_steps))
 f <- f + geom_line()
 f
@@ -136,7 +137,6 @@ This method of imputation has left the median number of steps per day intact (i.
 ```{r}
 df_weekend <- mutate(df_filled,day_of_week = weekdays(as.Date(date))) %>%
               mutate(weekend=as.factor(ifelse(day_of_week == "Sunday" | day_of_week == "Saturday", TRUE, FALSE)))
-              
 ```
 
 2. Make a panel plot containing time series plot of interval data, split between weekend and weekday 
@@ -144,7 +144,16 @@ df_weekend <- mutate(df_filled,day_of_week = weekdays(as.Date(date))) %>%
   b. use ggplot2 to facet by weekend vs weekday
 
 ```{r}
-
-t <- ggplot(avg_interval_steps, aes(interval, avg_steps))
+avg_interval_steps_weekend <- group_by(df_weekend, interval) %>%
+                              group_by(weekend, add=TRUE) %>%
+                              summarize(avg_steps = sum(steps))
 ```
 
+```{r}
+t <- ggplot(avg_interval_steps_weekend, aes(interval, avg_steps))
+t <- t + geom_line()
+t <- t + facet_grid(weekend ~ ., labeller = label_both)
+t 
+```
+
+Overall there is much more activity, on average, on weekdays compared to weekends. And in particular, weekday mornings are far more active than any other period. 
