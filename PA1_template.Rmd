@@ -127,7 +127,24 @@ print(med_daily_steps_filled)
 
 This method of imputation has left the median number of steps per day intact (i.e. identical to the calculation with na.rm=TRUE). However, the avgerage daily steps calculation has moved up by over 100 steps. 
 
-
-
-
 ## Are there differences in activity patterns between weekdays and weekends?
+
+1. Add a new factor variable to indicate weekend/weekdays using the weekday() function.
+  a. use weekday() function and mutate to convert dates to days of week
+  b. use mutate to make a weekend TRUE/FALSE factor variable
+
+```{r}
+df_weekend <- mutate(df_filled,day_of_week = weekdays(as.Date(date))) %>%
+              mutate(weekend=as.factor(ifelse(day_of_week == "Sunday" | day_of_week == "Saturday", TRUE, FALSE)))
+              
+```
+
+2. Make a panel plot containing time series plot of interval data, split between weekend and weekday 
+  a. construct the avg interval steps data  for weekends and weekdays
+  b. use ggplot2 to facet by weekend vs weekday
+
+```{r}
+
+t <- ggplot(avg_interval_steps, aes(interval, avg_steps))
+```
+
