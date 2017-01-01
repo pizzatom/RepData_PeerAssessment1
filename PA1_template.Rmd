@@ -114,7 +114,8 @@ total_daily_filled <- group_by(df_filled, date) %>%
                       summarize(daily_steps = sum(steps))
 
 a <- ggplot(group_by(total_daily_filled,date), aes(daily_steps))
-a + geom_histogram(bins=20)
+a <- a + geom_histogram(bins=20)
+a
 ```
 
 Calculate mean and meadian daily steps. Does this differ from before? How has imputing data impacted these measurements?
