@@ -117,6 +117,15 @@ a + geom_histogram(bins=20)
 ```
 
 Calculate mean and meadian daily steps. Does this differ from before? How has imputing data impacted these measurements?
+```{r}
+avg_daily_steps_filled <- summarize(total_daily_filled, mean_steps = mean(daily_steps))
+print(avg_daily_steps_filled)
+
+med_daily_steps_filled <- summarize(total_daily_filled, median_steps = median(daily_steps))
+print(med_daily_steps_filled)
+```
+
+This method of imputation has left the median number of steps per day intact (i.e. identical to the calculation with na.rm=TRUE). However, the avgerage daily steps calculation has moved up by over 100 steps. 
 
 
 
